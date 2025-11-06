@@ -18,7 +18,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const teacherNoteRoutes = require('./routes/teacherNotes');
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
 app.use(express.json());
 
 const upload = multer({ dest: 'uploads/' });
@@ -95,4 +95,6 @@ app.post('/upload-notes', upload.single('notesFile'), (req, res) => {
   res.json({ message: 'Fichier notes uploadé avec succès', filename: req.file.filename });
 });
 
-app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
+const server = app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
+
+module.exports = app;
