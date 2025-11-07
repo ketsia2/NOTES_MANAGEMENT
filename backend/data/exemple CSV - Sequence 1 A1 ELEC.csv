@@ -1,9 +1,18 @@
-﻿ ,FRANÇAIS,ANGLAIS,MATHÉMATIQUES ,SCIENCES PHYSIQUES,ECM,INFORMATIQUE,PRÉSENTATION DU MÉTIER,"HYGIÈNE, SÉCU. ENVI.",TECHNOLOGIES,DESSIN TECHNIQUES,TRAVAUX ÉLECTRICITÉ,EPS,TM,MOYENNE,RANG
-Coefficient,4,3,4,2,1,1,2,1,3,0,6,2,1, , 
-Noms & prénoms Eleve 0,4.5,8,7,4,11.5,7,0,6,10, ,13,2,20,7.8200000000000003,6e
-Noms & prénoms Eleve 1,1,2,3.5,10,4,10,12,6,5, ,10,15,18,7.0300000000000002,7e
-Noms & prénoms Eleve 2,6,9,6,12,11.5,5.5,13,15,10, ,10.5,2,17,9.0299999999999994,5e
-Noms & prénoms Eleve 3,10,7,10,11,13.5,6,15,7,12.5, ,12,17,19,11.4,2e
-Noms & prénoms Eleve 4,5,10,6,5,6.5,5.5,16.5,3,11.5, ,14.5,14,18,9.9800000000000004,4e
-Noms & prénoms Eleve 5,12,4,7,15,17.5,12,16,9,10, ,15,17,18,12.02,1er
-Noms & prénoms Eleve 6,8,12,10,13,14.5,6,17,9,8.5, ,10,14,19,11,3e
+﻿Coefficient,4,3,4,2,1,1,2,1,3,0,6,2,1
+Matière,Français,Anglais,Mathématiques,Sciences Physiques,ECM,Informatique,Présentation du Métier,Hygiène, Sécurité, Environnement,Technologies,Dessin Techniques,Travaux Électricité,EPS,TM
+Noms & prénoms Eleve 0,15,14,16,13,17,15,14,16,15,0,14,15,17
+Noms & prénoms Eleve 1,14,15,15,14,16,14,15,15,14,0,15,14,16
+Noms & prénoms Eleve 2,16,13,17,15,18,16,13,17,16,0,16,16,18
+Noms & prénoms Eleve 3,13,16,14,12,15,13,16,14,13,0,13,13,15
+Noms & prénoms Eleve 4,17,12,18,16,19,17,12,18,17,0,17,17,19
+Noms & prénoms Eleve 5,12,17,13,11,14,12,17,13,12,0,12,12,14
+Noms & prénoms Eleve 6,18,11,19,17,20,18,11,19,18,0,18,18,20
+Noms & prénoms Eleve 7,11,18,12,10,13,11,18,12,11,0,11,11,13
+Noms & prénoms Eleve 8,19,10,20,18,21,19,10,20,19,0,19,19,21
+Noms & prénoms Eleve 9,10,19,11,9,12,10,19,11,10,0,10,10,12
+Noms & prénoms Eleve 10,20,9,21,19,22,20,9,21,20,0,20,20,22
+Noms & prénoms Eleve 11,9,20,10,8,11,9,20,10,9,0,9,9,11
+Noms & prénoms Eleve 12,21,8,22,20,23,21,8,22,21,0,21,21,23
+Noms & prénoms Eleve 13,8,21,9,7,10,8,21,9,8,0,8,8,10
+Noms & prénoms Eleve 14,22,7,23,21,24,22,7,23,22,0,22,22,24
+Noms & prénoms Eleve 15,7,22,8,6,9,7,22,8,7,0,7,7,9

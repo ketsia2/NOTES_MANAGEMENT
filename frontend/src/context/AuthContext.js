@@ -28,7 +28,8 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/auth/profile');
+      const response = await axios.get('http://localhost:3001/api/auth/profile');
+      console.log('Profile response:', response.data);
       setUser(response.data.user);
     } catch (error) {
       localStorage.removeItem('token');
@@ -40,10 +41,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
+      console.log('Attempting login with:', { username, password });
+      const response = await axios.post('http://localhost:3001/api/auth/login', {
         username,
         password
       });
+      console.log('Login response:', response.data);
 
       const { token, user: userData } = response.data;
       localStorage.setItem('token', token);
@@ -52,13 +55,14 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true };
     } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
       return { success: false, error: error.response?.data?.error || 'Erreur de connexion' };
     }
   };
 
   const register = async (userData) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/register', userData);
+      const response = await axios.post('http://localhost:3001/api/auth/register', userData);
       return { success: true, data: response.data };
     } catch (error) {
       return { success: false, error: error.response?.data?.error || 'Erreur d\'inscription' };

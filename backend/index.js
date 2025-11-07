@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
@@ -18,13 +19,16 @@ const dashboardRoutes = require('./routes/dashboard');
 const teacherNoteRoutes = require('./routes/teacherNotes');
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
+app.use(cors({ origin: ['http://localhost:3001', 'http://localhost:3002', 'http://localhost:3003', 'http://localhost:3004'], credentials: true }));
 app.use(express.json());
 
 const upload = multer({ dest: 'uploads/' });
 
 // API Routes
+console.log('Mounting routes...');
+console.log('authRoutes type:', typeof authRoutes);
 app.use('/api/auth', authRoutes);
+console.log('Mounted /api/auth');
 app.use('/api/students', studentRoutes);
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/subjects', subjectRoutes);
@@ -33,6 +37,7 @@ app.use('/api/search', searchRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/teacher-notes', teacherNoteRoutes);
+console.log('All routes mounted');
 
 // Legacy routes for backward compatibility
 app.post('/upload-eleves', upload.single('file'), (req, res) => {
@@ -95,6 +100,20 @@ app.post('/upload-notes', upload.single('notesFile'), (req, res) => {
   res.json({ message: 'Fichier notes uploadé avec succès', filename: req.file.filename });
 });
 
-const server = app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
+// Add a simple test route to verify server is working
+app.get('/test', (req, res) => {
+  res.json({ message: 'Backend is running correctly' });
+});
+
+// Remove duplicate login route that conflicts with auth routes
+
+// Add a catch-all route to debug routing
+app.use((req, res) => {
+  console.log('Unhandled request:', req.method, req.url);
+  res.status(404).json({ error: 'Route not found', method: req.method, url: req.url });
+});
+
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
 
 module.exports = app;

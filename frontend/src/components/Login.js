@@ -7,7 +7,15 @@ const Login = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    role: 'teacher' // Default role
+    role: 'teacher', // Default role
+    email: '',
+    teacherData: {
+      nom: '',
+      prenoms: '',
+      telephone: '',
+      matieres: [],
+      classes: []
+    }
   });
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
@@ -17,10 +25,22 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    if (name.startsWith('teacherData.')) {
+      const field = name.split('.')[1];
+      setFormData({
+        ...formData,
+        teacherData: {
+          ...formData.teacherData,
+          [field]: value
+        }
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -79,6 +99,40 @@ const Login = () => {
                   <option value="admin">Administrateur</option>
                 </select>
               </div>
+
+              {formData.role === 'teacher' && (
+                <>
+                  <div className="form-group">
+                    <label>Nom:</label>
+                    <input
+                      type="text"
+                      name="teacherData.nom"
+                      value={formData.teacherData.nom}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Prénoms:</label>
+                    <input
+                      type="text"
+                      name="teacherData.prenoms"
+                      value={formData.teacherData.prenoms}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Téléphone:</label>
+                    <input
+                      type="tel"
+                      name="teacherData.telephone"
+                      value={formData.teacherData.telephone}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </>
+              )}
             </>
           )}
 

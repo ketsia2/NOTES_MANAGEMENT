@@ -4,7 +4,15 @@ const readCSV = require('../utils/csvReader');
 const writeCSV = require('../utils/csvWriter');
 
 // In-memory storage for demo purposes
-let classes = [new Classe({ nom: 'A1 ELEC' })];
+let classes = [
+  new Classe({ nom: '6ème', niveau: '6ème', filiere: 'Général' }),
+  new Classe({ nom: '5ème', niveau: '5ème', filiere: 'Général' }),
+  new Classe({ nom: '4ème', niveau: '4ème', filiere: 'Général' }),
+  new Classe({ nom: '3ème', niveau: '3ème', filiere: 'Général' }),
+  new Classe({ nom: '2nd', niveau: '2nd', filiere: 'Général' }),
+  new Classe({ nom: '1ère', niveau: '1ère', filiere: 'Général' }),
+  new Classe({ nom: 'Tle', niveau: 'Tle', filiere: 'Général' })
+];
 
 const loadNotesFromCSV = async (filePath) => {
   try {

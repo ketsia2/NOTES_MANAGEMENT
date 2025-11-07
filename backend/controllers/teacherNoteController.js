@@ -5,15 +5,28 @@ const Classe = require('../models/Classe');
 const readCSV = require('../utils/csvReader');
 const writeCSV = require('../utils/csvWriter');
 
-// In-memory storage
+// In-memory storage - shared with other controllers
 let teachers = [];
 let subjects = [];
-let classes = [new Classe({ nom: 'A1 ELEC' })];
+let classes = [
+  new Classe({ nom: '6ème', niveau: '6ème', filiere: 'Général' }),
+  new Classe({ nom: '5ème', niveau: '5ème', filiere: 'Général' }),
+  new Classe({ nom: '4ème', niveau: '4ème', filiere: 'Général' }),
+  new Classe({ nom: '3ème', niveau: '3ème', filiere: 'Général' }),
+  new Classe({ nom: '2nd', niveau: '2nd', filiere: 'Général' }),
+  new Classe({ nom: '1ère', niveau: '1ère', filiere: 'Général' }),
+  new Classe({ nom: 'Tle', niveau: 'Tle', filiere: 'Général' })
+];
 
 exports.getTeacherNotes = async (req, res) => {
   try {
     const { teacherId } = req.params;
     const { classe, matiere, sequence } = req.query;
+
+    // Check if the authenticated teacher matches the teacherId in URL
+    if (req.user.role === 'teacher' && req.user.id !== teacherId) {
+      return res.status(403).json({ error: 'Accès non autorisé' });
+    }
 
     const teacher = teachers.find(t => t.id === teacherId);
     if (!teacher) {
@@ -53,6 +66,11 @@ exports.createTeacherNote = async (req, res) => {
     const { teacherId } = req.params;
     const noteData = req.body;
 
+    // Check if the authenticated teacher matches the teacherId in URL
+    if (req.user.role === 'teacher' && req.user.id !== teacherId) {
+      return res.status(403).json({ error: 'Accès non autorisé' });
+    }
+
     const teacher = teachers.find(t => t.id === teacherId);
     if (!teacher) {
       return res.status(404).json({ error: 'Enseignant non trouvé' });
@@ -91,6 +109,11 @@ exports.updateTeacherNote = async (req, res) => {
     const { teacherId, noteId } = req.params;
     const updateData = req.body;
 
+    // Check if the authenticated teacher matches the teacherId in URL
+    if (req.user.role === 'teacher' && req.user.id !== teacherId) {
+      return res.status(403).json({ error: 'Accès non autorisé' });
+    }
+
     const teacher = teachers.find(t => t.id === teacherId);
     if (!teacher) {
       return res.status(404).json({ error: 'Enseignant non trouvé' });
@@ -120,6 +143,11 @@ exports.getTeacherClasses = async (req, res) => {
   try {
     const { teacherId } = req.params;
 
+    // Check if the authenticated teacher matches the teacherId in URL
+    if (req.user.role === 'teacher' && req.user.id !== teacherId) {
+      return res.status(403).json({ error: 'Accès non autorisé' });
+    }
+
     const teacher = teachers.find(t => t.id === teacherId);
     if (!teacher) {
       return res.status(404).json({ error: 'Enseignant non trouvé' });
@@ -134,6 +162,11 @@ exports.getTeacherClasses = async (req, res) => {
 exports.getTeacherSubjects = async (req, res) => {
   try {
     const { teacherId } = req.params;
+
+    // Check if the authenticated teacher matches the teacherId in URL
+    if (req.user.role === 'teacher' && req.user.id !== teacherId) {
+      return res.status(403).json({ error: 'Accès non autorisé' });
+    }
 
     const teacher = teachers.find(t => t.id === teacherId);
     if (!teacher) {

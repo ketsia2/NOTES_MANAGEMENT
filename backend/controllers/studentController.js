@@ -5,12 +5,28 @@ const writeCSV = require('../utils/csvWriter');
 const fs = require('fs');
 
 // In-memory storage for demo purposes (replace with database in production)
-let classes = [new Classe({ nom: 'A1 ELEC' })];
+let classes = [
+  new Classe({ nom: '6ème', niveau: '6ème', filiere: 'Général' }),
+  new Classe({ nom: '5ème', niveau: '5ème', filiere: 'Général' }),
+  new Classe({ nom: '4ème', niveau: '4ème', filiere: 'Général' }),
+  new Classe({ nom: '3ème', niveau: '3ème', filiere: 'Général' }),
+  new Classe({ nom: '2nd', niveau: '2nd', filiere: 'Général' }),
+  new Classe({ nom: '1ère', niveau: '1ère', filiere: 'Général' }),
+  new Classe({ nom: 'Tle', niveau: 'Tle', filiere: 'Général' })
+];
 
 const loadStudentsFromCSV = async (filePath) => {
   try {
     const data = await readCSV(filePath);
-    return data.map(row => new Student(row));
+    return data.map(row => {
+      const student = new Student(row);
+      // Extract class name from filename
+      const classMatch = filePath.match(/Liste eleves (.+)\.csv$/);
+      if (classMatch) {
+        student.classe = classMatch[1];
+      }
+      return student;
+    });
   } catch (error) {
     throw new Error('Erreur lors du chargement des élèves: ' + error.message);
   }
@@ -30,13 +46,34 @@ exports.getStudents = async (req, res) => {
     let students = [];
 
     if (classe) {
-      const classObj = classes.find(c => c.nom === classe);
-      if (classObj) {
-        students = classObj.getEleves();
+      // Load students from specific class CSV file
+      const csvFile = `./data/exemple CSV - Liste eleves ${classe}.csv`;
+      try {
+        students = await loadStudentsFromCSV(csvFile);
+      } catch (error) {
+        // If specific class file doesn't exist, return empty array
+        students = [];
       }
     } else {
-      // Load from CSV if no specific class
-      students = await loadStudentsFromCSV('./data/exemple CSV - Liste eleves A1 ELEC.csv');
+      // Load all students from all class CSV files
+      const fs = require('fs');
+      const allStudents = [];
+
+      // List of all classes
+      const classNames = ['6ème', '5ème', '4ème', '3ème', '2nd', '1ère', 'Tle'];
+
+      for (const className of classNames) {
+        const csvFile = `./data/exemple CSV - Liste eleves ${className}.csv`;
+        try {
+          const classStudents = await loadStudentsFromCSV(csvFile);
+          allStudents.push(...classStudents);
+        } catch (error) {
+          // Skip if file doesn't exist
+          continue;
+        }
+      }
+
+      students = allStudents;
     }
 
     res.json(students);
@@ -98,8 +135,26 @@ exports.deleteStudent = async (req, res) => {
 exports.filterStudents = async (req, res) => {
   try {
     const { sexe, anciennete, classe } = req.query;
-    let students = await loadStudentsFromCSV('./data/exemple CSV - Liste eleves A1 ELEC.csv');
 
+    // Load all students first
+    const fs = require('fs');
+    let students = [];
+
+    // List of all classes
+    const classNames = ['6ème', '5ème', '4ème', '3ème', '2nd', '1ère', 'Tle'];
+
+    for (const className of classNames) {
+      const csvFile = `./data/exemple CSV - Liste eleves ${className}.csv`;
+      try {
+        const classStudents = await loadStudentsFromCSV(csvFile);
+        students.push(...classStudents);
+      } catch (error) {
+        // Skip if file doesn't exist
+        continue;
+      }
+    }
+
+    // Apply filters
     if (sexe) {
       students = students.filter(s => s.sexe === sexe);
     }

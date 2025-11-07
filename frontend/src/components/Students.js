@@ -30,7 +30,7 @@ const Students = () => {
     anciennete: '',
     dateNaissance: '',
     residence: '',
-    classe: 'A1 ELEC'
+    classe: '6ème'
   });
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [showReportCard, setShowReportCard] = useState(false);
@@ -46,7 +46,7 @@ const Students = () => {
   const fetchStudents = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3000/api/students');
+      const response = await axios.get('http://localhost:3001/api/students');
       setStudents(response.data);
     } catch (error) {
       setError('Erreur lors du chargement des élèves');
@@ -119,9 +119,9 @@ const Students = () => {
     e.preventDefault();
     try {
       if (editingStudent) {
-        await axios.put(`http://localhost:3000/api/students/${editingStudent.matricule}`, formData);
+        await axios.put(`http://localhost:3001/api/students/${editingStudent.matricule}`, formData);
       } else {
-        await axios.post('http://localhost:3000/api/students', formData);
+        await axios.post('http://localhost:3001/api/students', formData);
       }
       fetchStudents();
       setShowForm(false);
@@ -142,7 +142,7 @@ const Students = () => {
   const handleDelete = async (matricule) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cet élève ?')) {
       try {
-        await axios.delete(`http://localhost:3000/api/students/${matricule}`);
+        await axios.delete(`http://localhost:3001/api/students/${matricule}`);
         fetchStudents();
       } catch (error) {
         setError('Erreur lors de la suppression');
@@ -159,7 +159,7 @@ const Students = () => {
       anciennete: '',
       dateNaissance: '',
       residence: '',
-      classe: 'A1 ELEC'
+      classe: '6ème'
     });
   };
 
@@ -245,7 +245,13 @@ const Students = () => {
             <label>Classe:</label>
             <select name="classe" value={filters.classe} onChange={handleFilterChange}>
               <option value="">Toutes</option>
-              <option value="A1 ELEC">A1 ELEC</option>
+              <option value="6ème">6ème</option>
+              <option value="5ème">5ème</option>
+              <option value="4ème">4ème</option>
+              <option value="3ème">3ème</option>
+              <option value="2nd">2nd</option>
+              <option value="1ère">1ère</option>
+              <option value="Tle">Tle</option>
             </select>
           </div>
 
@@ -414,7 +420,13 @@ const Students = () => {
                   onChange={handleInputChange}
                   required
                 >
-                  <option value="A1 ELEC">A1 ELEC</option>
+                  <option value="6ème">6ème</option>
+                  <option value="5ème">5ème</option>
+                  <option value="4ème">4ème</option>
+                  <option value="3ème">3ème</option>
+                  <option value="2nd">2nd</option>
+                  <option value="1ère">1ère</option>
+                  <option value="Tle">Tle</option>
                 </select>
               </div>
 

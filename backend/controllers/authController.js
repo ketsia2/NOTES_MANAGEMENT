@@ -33,6 +33,16 @@ exports.register = async (req, res) => {
   try {
     const { username, email, password, role, teacherData } = req.body;
 
+    // Only admin can register teachers
+    if (role === 'teacher' && req.user?.role !== 'admin') {
+      return res.status(403).json({ error: 'Seul un administrateur peut créer un compte enseignant' });
+    }
+
+    // Validate teacher data for teacher registration
+    if (role === 'teacher' && !teacherData) {
+      return res.status(400).json({ error: 'Les données de l\'enseignant sont requises' });
+    }
+
     // Check if user already exists
     const existingUser = users.find(u => u.username === username || u.email === email);
     if (existingUser) {
@@ -44,11 +54,15 @@ exports.register = async (req, res) => {
 
     // If registering a teacher, create teacher profile
     if (role === 'teacher' && teacherData) {
-      const teacher = new Teacher(teacherData);
-      teacher.id = user.id; // Link user to teacher
-      teachers.push(teacher);
-      user.teacherId = teacher.id;
-    }
+       const teacher = new Teacher({
+         ...teacherData,
+         id: user.id, // Link user to teacher
+         matieres: teacherData.matieres || [], // Subjects the teacher teaches
+         classes: teacherData.classes || [] // Classes the teacher teaches
+       });
+       teachers.push(teacher);
+       user.teacherId = teacher.id;
+     }
 
     users.push(user);
 
@@ -70,15 +84,18 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
+    console.log('LOGIN ROUTE CALLED:', req.body);
     const { username, password } = req.body;
 
     const user = users.find(u => u.username === username);
     if (!user) {
+      console.log('User not found:', username);
       return res.status(401).json({ error: 'Identifiants invalides' });
     }
 
     const isValidPassword = await user.checkPassword(password);
     if (!isValidPassword) {
+      console.log('Invalid password for user:', username);
       return res.status(401).json({ error: 'Identifiants invalides' });
     }
 
@@ -91,6 +108,7 @@ exports.login = async (req, res) => {
       teacherData = teachers.find(t => t.id === user.teacherId);
     }
 
+    console.log('Login successful for user:', username);
     res.json({
       message: 'Connexion réussie',
       token,
@@ -103,6 +121,7 @@ exports.login = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ error: error.message });
   }
 };
